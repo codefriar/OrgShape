@@ -18,13 +18,14 @@ public with sharing class OrgShape {
      * @return      `Boolean`
      */
     public static Boolean isPlatformCacheEnabled() {
-        if (isSeeAllDataTrue() || findCachePartition() == null) {
+        String defaultCachePartition = queryForDefaultCachePartition();
+        if (isSeeAllDataTrue() || defaultCachePartition == null) {
             return false;
         }
 
         Boolean cacheAvailable = false;
         try {
-            Cache.Org.getPartition(findCachePartition()).getCapacity();
+            Cache.Org.getPartition(defaultCachePartition).getCapacity();
             cacheAvailable = true;
         } catch (Exception ex) {
             system.debug(LoggingLevel.WARN, 'Failed to get orgCache');
@@ -85,7 +86,7 @@ public with sharing class OrgShape {
      * @return      `String`
      */
     @SuppressWarnings('PMD.ApexCRUDViolation')
-    private static String findCachePartition() {
+    private static String queryForDefaultCachePartition() {
         if (OrgShape.safeDefaultCachePartition != null) {
             return OrgShape.safeDefaultCachePartition;
         }
@@ -98,7 +99,7 @@ public with sharing class OrgShape {
             ];
             OrgShape.safeDefaultCachePartition =
                 'local.' + partition.DeveloperName;
-        } catch (QueryException qe) {
+        } catch (System.QueryException qe) {
             System.debug(
                 LoggingLevel.WARN,
                 'Caught QueryException looking for cache partition'
