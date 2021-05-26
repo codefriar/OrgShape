@@ -7,7 +7,82 @@
  */
 public with sharing class OrgShape {
     @TestVisible
-    private static String safeDefaultCachePartition;
+    private String safeDefaultCachePartition;
+    
+    @TestVisible
+    private Organization orgShape;
+
+    public Boolean isSandbox {
+        get {
+            return getOrgShape().isSandbox;
+        }
+    }
+
+    public Boolean multiCurrencyEnabled {
+        get{
+            return UserInfo.isMultiCurrencyOrganization();
+        }
+    }
+
+    public String orgType { 
+        get {
+            return getOrgShape().OrganizationType;
+        }
+    }
+
+    public Boolean isReadOnly {
+        get {
+            return getOrgShape().isReadOnly;
+        }
+    }
+
+    public String instanceName {
+        get {
+            return getOrgShape().instanceName;
+        }
+    }
+
+    public String podName {
+        get {
+            return instanceName;
+        }
+    }
+
+    public Integer getFiscalYearStartMonth {
+        get {
+            return getOrgShape().fiscalYearStartMonth;
+        }
+    }
+
+    public Boolean lightningEnabled {
+        get{
+            return UserInfo.getUiThemeDisplayed().containsIgnoreCase('theme4');
+        }
+    }
+
+    public Id id {
+        get {
+            return getOrgShape().id;
+        }
+    }
+
+    public String locale{
+        get {
+            return getOrgShape().languageLocaleKey;
+        }
+    }
+
+    public String name {
+        get {
+            return getOrgShape().name;
+        }
+    }
+
+    public String timeZoneKey{
+        get{
+            return getOrgShape().timeZoneSidKey;
+        }
+    }
 
     /**
      * @description Method determines if platform cache is enabled for this org
@@ -17,7 +92,7 @@ public with sharing class OrgShape {
      * when you have to use seeAllData=true
      * @return      `Boolean`
      */
-    public static Boolean isPlatformCacheEnabled() {
+    public Boolean isPlatformCacheEnabled() {
         String defaultCachePartition = queryForDefaultCachePartition();
         if (isSeeAllDataTrue() || defaultCachePartition == null) {
             return false;
@@ -52,7 +127,7 @@ public with sharing class OrgShape {
      * @return      `Boolean`
      */
     @TestVisible
-    private static Boolean isSeeAllDataTrue() {
+    private Boolean isSeeAllDataTrue() {
         Boolean seeAllData = false;
         if (!Test.isRunningTest()) {
             return seeAllData; // This line is not testable :(
@@ -86,9 +161,9 @@ public with sharing class OrgShape {
      * @return      `String`
      */
     @SuppressWarnings('PMD.ApexCRUDViolation')
-    private static String queryForDefaultCachePartition() {
-        if (OrgShape.safeDefaultCachePartition != null) {
-            return OrgShape.safeDefaultCachePartition;
+    private String queryForDefaultCachePartition() {
+        if (this.safeDefaultCachePartition != null) {
+            return this.safeDefaultCachePartition;
         }
         try {
             PlatformCachePartition partition = [
@@ -97,7 +172,7 @@ public with sharing class OrgShape {
                 WHERE NamespacePrefix = ''
                 LIMIT 1
             ];
-            OrgShape.safeDefaultCachePartition =
+            this.safeDefaultCachePartition =
                 'local.' + partition.DeveloperName;
         } catch (System.QueryException qe) {
             System.debug(
@@ -105,6 +180,47 @@ public with sharing class OrgShape {
                 'Caught QueryException looking for cache partition'
             );
         }
-        return OrgShape.safeDefaultCachePartition;
+        return this.safeDefaultCachePartition;
+    }
+
+    /**
+     * @description Uses a dynamic soql query to determine if Advanced 
+     * MultiCurrency Management is enabled. Note, this must be a dynamic soql
+     * query because referencing DatedConversionRate will not compile in orgs
+     * without Advanced MultiCurrency Management enabled.
+     * 
+     * Note: This was originally written by the NPSP team and can be found here:
+     * https://github.com/SalesforceFoundation/NPSP/blob/aad20ffb747ecda9a037c4bce9cd19617b6a727b/src/classes/UTIL_Currency.cls#L79
+     * @return      `Boolean`
+     */
+    public Boolean advancedMultiCurrencyManagementEnabled(){
+        Boolean isACMEnabled = false;
+        if (this.multiCurrencyEnabled) {
+            try {
+                Integer datedConversionRateCount = Database.query('SELECT Id FROM DatedConversionRate LIMIT 1').size();
+                if (datedConversionRateCount == 1) {
+                    isACMEnabled = true;
+                }
+            } catch (Exception e) {
+                // Nothing to do, ACM = false
+            }
+        }
+        return isACMEnabled;
+    }
+
+    /// HELPER METHODS
+
+    private Organization getOrgShape(){
+        if(this.OrgShape != null){
+            return this.orgShape;
+        } else {
+            this.orgShape = [
+                SELECT FIELDS(STANDARD)
+                FROM Organization
+                LIMIT 1
+            ];
+        }
+        return this.orgShape;
+        
     }
 }
