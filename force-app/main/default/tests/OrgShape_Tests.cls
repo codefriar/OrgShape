@@ -28,14 +28,14 @@ class OrgShape_Tests {
         System.assertEquals(orgCheck.name, orgShape.name, 'Expected the OrgShape property to match the query');
         System.assertEquals(orgCheck.namespacePrefix, orgShape.namespacePrefix, 'Expected the OrgShape property to match the query');
         System.assertEquals(String.isNotBlank(orgCheck.namespacePrefix), orgShape.hasNamespacePrefix, 'Expected the OrgShape property to match the query');
-        System.assertEquals(orgcheck.id, orgShape.orgShape.id, 'expected these to be equal');
+        System.assertEquals(orgCheck.id, orgShape.orgShape.id, 'expected these to be equal');
     }
 
     @isTest
-    static void testAdvancedMultiCurrencyMangement(){
+    static void testAdvancedMultiCurrencyManagement(){
         Boolean datedConversionRateObjectExists = false;
         try {
-            Integer datedConversionRateCount = Database.query('SELECT Id FROM DatedConversionRate LIMIT 1').size();
+            Database.query('SELECT Id FROM DatedConversionRate LIMIT 1').size();
             datedConversionRateObjectExists = true;
         } catch (Exception e) {
             // no op, as we default to false;
@@ -44,7 +44,7 @@ class OrgShape_Tests {
         Boolean checkValue = new OrgShape().isAdvancedMultiCurrencyManagementEnabled();
         Test.stopTest();
 
-        system.assertEquals(datedConversionRateObjectExists, checkValue, 'Expected the checkvalue to equal the dated');
+        system.assertEquals(datedConversionRateObjectExists, checkValue, 'Expected the check value to equal the dated');
     }
 
     @isTest
@@ -89,7 +89,7 @@ class OrgShape_Tests {
 
     @isTest(SeeAllData=true)
     @SuppressWarnings('PMD.ApexUnitTestShouldNotUseSeeAllDataTrue')
-    static void testSeeAllDataPostiveWhenEnabled() {
+    static void testSeeAllDataPositiveWhenEnabled() {
         System.assert(
             orgShape.isSeeAllDataTrue(),
             'Expected see all data to be true in a test method annotated with seeAllData=true'
