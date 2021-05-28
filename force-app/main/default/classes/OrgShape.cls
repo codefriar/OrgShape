@@ -188,8 +188,7 @@ public with sharing class OrgShape {
      * seeAllData=true when not absolutely necessary.
      * @return      `Boolean`
      */
-    @TestVisible
-    private Boolean isSeeAllDataTrue() {
+    public Boolean isSeeAllDataTrue() {
         Boolean seeAllData = false;
         if (!Test.isRunningTest()) {
             return seeAllData; // This line is not testable :(
@@ -255,7 +254,7 @@ public with sharing class OrgShape {
      * https://github.com/SalesforceFoundation/NPSP/blob/aad20ffb747ecda9a037c4bce9cd19617b6a727b/src/classes/UTIL_Currency.cls#L79
      * @return      `Boolean`
      */
-    public Boolean advancedMultiCurrencyManagementEnabled(){
+    public Boolean isAdvancedMultiCurrencyManagementEnabled(){
         Boolean isACMEnabled = false;
         if (this.multiCurrencyEnabled) {
             try {
@@ -274,8 +273,11 @@ public with sharing class OrgShape {
 
     /**
      * @description Private method that memoizes the query result
+     * Suppressing the PMD warning to validate crud permissions before
+     * DML, because the Organization Object is always available.
      * @return      `Organization`
      */
+    @SuppressWarnings('PMD.ApexCRUDViolation')
     private Organization getOrgShape(){
         if(this.OrgShape != null){
             return this.orgShape;

@@ -41,7 +41,7 @@ class OrgShape_Tests {
             // no op, as we default to false;
         }
         Test.startTest();
-        Boolean checkValue = new OrgShape().advancedMultiCurrencyManagementEnabled();
+        Boolean checkValue = new OrgShape().isAdvancedMultiCurrencyManagementEnabled();
         Test.stopTest();
 
         system.assertEquals(datedConversionRateObjectExists, checkValue, 'Expected the checkvalue to equal the dated');
