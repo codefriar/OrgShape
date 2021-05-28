@@ -1,38 +1,93 @@
 @isTest
 class OrgShape_Tests {
-
     private static OrgShape orgShape;
     private static Organization orgCheck;
     static {
         orgShape = new orgShape();
-        orgCheck = [
-            SELECT FIELDS(STANDARD)
-            FROM Organization
-            LIMIT 1
-        ];
+        orgCheck = [SELECT FIELDS(STANDARD) FROM Organization LIMIT 1];
     }
 
     @isTest
-    static void testProperties(){
-        System.assertEquals(orgCheck.isSandbox, orgShape.isSandbox, 'Expected the OrgShape property to match the query');
-        System.assertEquals(UserInfo.isMultiCurrencyOrganization(), orgShape.multiCurrencyEnabled, 'Expected the OrgShape property to match the UserInfo property');
-        System.assertEquals(orgCheck.OrganizationType, orgShape.orgType, 'Expected the OrgShape property to match the query');
-        System.assertEquals(orgCheck.isReadOnly, orgShape.isReadOnly, 'Expected the OrgShape property to match the query');
-        System.assertEquals(orgCheck.instanceName, orgShape.instanceName, 'Expected the OrgShape property to match the query');
-        System.assertEquals(orgCheck.instanceName, orgShape.podName, 'Expected the OrgShape property to match the query');
-        System.assertEquals(orgCheck.fiscalYearStartMonth, orgShape.getFiscalYearStartMonth, 'Expected the OrgShape property to match the query');
-        System.assertEquals(UserInfo.getUiThemeDisplayed().containsIgnoreCase('theme4'), orgShape.lightningEnabled, 'Expected the OrgShape property to match the query');
-        System.assertEquals(orgCheck.id, orgShape.id, 'Expected the OrgShape property to match the query');
-        System.assertEquals(orgCheck.languageLocaleKey, orgShape.locale, 'Expected the OrgShape property to match the query');
-        System.assertEquals(orgCheck.timeZoneSidKey, orgShape.timeZoneKey, 'Expected the OrgShape property to match the query');
-        System.assertEquals(orgCheck.name, orgShape.name, 'Expected the OrgShape property to match the query');
-        System.assertEquals(orgCheck.namespacePrefix, orgShape.namespacePrefix, 'Expected the OrgShape property to match the query');
-        System.assertEquals(String.isNotBlank(orgCheck.namespacePrefix), orgShape.hasNamespacePrefix, 'Expected the OrgShape property to match the query');
-        System.assertEquals(orgCheck.id, orgShape.orgShape.id, 'expected these to be equal');
+    static void testProperties() {
+        System.assertEquals(
+            orgCheck.isSandbox,
+            orgShape.isSandbox,
+            'Expected the OrgShape property to match the query'
+        );
+        System.assertEquals(
+            UserInfo.isMultiCurrencyOrganization(),
+            orgShape.multiCurrencyEnabled,
+            'Expected the OrgShape property to match the UserInfo property'
+        );
+        System.assertEquals(
+            orgCheck.OrganizationType,
+            orgShape.orgType,
+            'Expected the OrgShape property to match the query'
+        );
+        System.assertEquals(
+            orgCheck.isReadOnly,
+            orgShape.isReadOnly,
+            'Expected the OrgShape property to match the query'
+        );
+        System.assertEquals(
+            orgCheck.instanceName,
+            orgShape.instanceName,
+            'Expected the OrgShape property to match the query'
+        );
+        System.assertEquals(
+            orgCheck.instanceName,
+            orgShape.podName,
+            'Expected the OrgShape property to match the query'
+        );
+        System.assertEquals(
+            orgCheck.fiscalYearStartMonth,
+            orgShape.getFiscalYearStartMonth,
+            'Expected the OrgShape property to match the query'
+        );
+        System.assertEquals(
+            UserInfo.getUiThemeDisplayed().containsIgnoreCase('theme4'),
+            orgShape.lightningEnabled,
+            'Expected the OrgShape property to match the query'
+        );
+        System.assertEquals(
+            orgCheck.id,
+            orgShape.id,
+            'Expected the OrgShape property to match the query'
+        );
+        System.assertEquals(
+            orgCheck.languageLocaleKey,
+            orgShape.locale,
+            'Expected the OrgShape property to match the query'
+        );
+        System.assertEquals(
+            orgCheck.timeZoneSidKey,
+            orgShape.timeZoneKey,
+            'Expected the OrgShape property to match the query'
+        );
+        System.assertEquals(
+            orgCheck.name,
+            orgShape.name,
+            'Expected the OrgShape property to match the query'
+        );
+        System.assertEquals(
+            orgCheck.namespacePrefix,
+            orgShape.namespacePrefix,
+            'Expected the OrgShape property to match the query'
+        );
+        System.assertEquals(
+            String.isNotBlank(orgCheck.namespacePrefix),
+            orgShape.hasNamespacePrefix,
+            'Expected the OrgShape property to match the query'
+        );
+        System.assertEquals(
+            orgCheck.id,
+            orgShape.orgShape.id,
+            'expected these to be equal'
+        );
     }
 
     @isTest
-    static void testAdvancedMultiCurrencyManagement(){
+    static void testAdvancedMultiCurrencyManagement() {
         Boolean datedConversionRateObjectExists = false;
         try {
             Database.query('SELECT Id FROM DatedConversionRate LIMIT 1').size();
@@ -41,10 +96,15 @@ class OrgShape_Tests {
             // no op, as we default to false;
         }
         Test.startTest();
-        Boolean checkValue = new OrgShape().isAdvancedMultiCurrencyManagementEnabled();
+        Boolean checkValue = new OrgShape()
+            .isAdvancedMultiCurrencyManagementEnabled();
         Test.stopTest();
 
-        system.assertEquals(datedConversionRateObjectExists, checkValue, 'Expected the check value to equal the dated');
+        system.assertEquals(
+            datedConversionRateObjectExists,
+            checkValue,
+            'Expected the check value to equal the dated'
+        );
     }
 
     @isTest
@@ -64,7 +124,7 @@ class OrgShape_Tests {
 
     @isTest
     static void testGetSafeDefaultCachePartitionMemoized() {
-        orgShape.safeDefaultCachePartition = 'foo';
+        orgShape.safeDefaultCachePartition = 'OrgShapeDefault';
         Test.startTest();
         Boolean result = orgShape.isPlatformCacheEnabled();
         Test.stopTest();

@@ -1,13 +1,14 @@
 {
   "trailingComma": "none",
+  "singleQuote": true,
+  "tabWidth": 4,
   "overrides": [
     {
-      "files": "**/lwc/**/*.html",
-      "options": { "parser": "lwc" }
+      "files": ["force-app/**/**/classes/*.cls"]
     },
     {
-      "files": "*.{cmp,page,component}",
-      "options": { "parser": "html" }
+      "files": "force-app/**/**/lwc/**/*.html",
+      "options": { "parser": "lwc" }
     }
   ]
 }
