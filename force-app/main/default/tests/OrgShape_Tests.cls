@@ -1,5 +1,52 @@
 @isTest
 class OrgShape_Tests {
+
+    private static OrgShape orgShape;
+    private static Organization orgCheck;
+    static {
+        orgShape = new orgShape();
+        orgCheck = [
+            SELECT FIELDS(STANDARD)
+            FROM Organization
+            LIMIT 1
+        ];
+    }
+
+    @isTest
+    static void testProperties(){
+        System.assertEquals(orgCheck.isSandbox, orgShape.isSandbox, 'Expected the OrgShape property to match the query');
+        System.assertEquals(UserInfo.isMultiCurrencyOrganization(), orgShape.multiCurrencyEnabled, 'Expected the OrgShape property to match the UserInfo property');
+        System.assertEquals(orgCheck.OrganizationType, orgShape.orgType, 'Expected the OrgShape property to match the query');
+        System.assertEquals(orgCheck.isReadOnly, orgShape.isReadOnly, 'Expected the OrgShape property to match the query');
+        System.assertEquals(orgCheck.instanceName, orgShape.instanceName, 'Expected the OrgShape property to match the query');
+        System.assertEquals(orgCheck.instanceName, orgShape.podName, 'Expected the OrgShape property to match the query');
+        System.assertEquals(orgCheck.fiscalYearStartMonth, orgShape.getFiscalYearStartMonth, 'Expected the OrgShape property to match the query');
+        System.assertEquals(UserInfo.getUiThemeDisplayed().containsIgnoreCase('theme4'), orgShape.lightningEnabled, 'Expected the OrgShape property to match the query');
+        System.assertEquals(orgCheck.id, orgShape.id, 'Expected the OrgShape property to match the query');
+        System.assertEquals(orgCheck.languageLocaleKey, orgShape.locale, 'Expected the OrgShape property to match the query');
+        System.assertEquals(orgCheck.timeZoneSidKey, orgShape.timeZoneKey, 'Expected the OrgShape property to match the query');
+        System.assertEquals(orgCheck.name, orgShape.name, 'Expected the OrgShape property to match the query');
+        System.assertEquals(orgCheck.namespacePrefix, orgShape.namespacePrefix, 'Expected the OrgShape property to match the query');
+        System.assertEquals(String.isNotBlank(orgCheck.namespacePrefix), orgShape.hasNamespacePrefix, 'Expected the OrgShape property to match the query');
+        System.assertEquals(orgcheck.id, orgShape.orgShape.id, 'expected these to be equal');
+    }
+
+    @isTest
+    static void testAdvancedMultiCurrencyMangement(){
+        Boolean datedConversionRateObjectExists = false;
+        try {
+            Integer datedConversionRateCount = Database.query('SELECT Id FROM DatedConversionRate LIMIT 1').size();
+            datedConversionRateObjectExists = true;
+        } catch (Exception e) {
+            // no op, as we default to false;
+        }
+        Test.startTest();
+        Boolean checkValue = new OrgShape().advancedMultiCurrencyManagementEnabled();
+        Test.stopTest();
+
+        system.assertEquals(datedConversionRateObjectExists, checkValue, 'Expected the checkvalue to equal the dated');
+    }
+
     @isTest
     static void testPlatformCachePositive() {
         // Apex Recipes scratch org enable platform cache by default
@@ -7,7 +54,7 @@ class OrgShape_Tests {
         // a default partition specified. We cannot ship a default partition
         // selected in metadata, so you have to do this manually!
         Test.startTest();
-        Boolean result = OrgShape.isPlatformCacheEnabled();
+        Boolean result = orgShape.isPlatformCacheEnabled();
         Test.stopTest();
         System.assert(
             result,
@@ -17,9 +64,9 @@ class OrgShape_Tests {
 
     @isTest
     static void testGetSafeDefaultCachePartitionMemoized() {
-        OrgShape.safeDefaultCachePartition = 'foo';
+        orgShape.safeDefaultCachePartition = 'foo';
         Test.startTest();
-        Boolean result = OrgShape.isPlatformCacheEnabled();
+        Boolean result = orgShape.isPlatformCacheEnabled();
         Test.stopTest();
         System.assert(
             !result,
@@ -31,7 +78,7 @@ class OrgShape_Tests {
     @SuppressWarnings('PMD.ApexUnitTestShouldNotUseSeeAllDataTrue')
     static void testPlatformCacheDisabledWhenSeeAllDataTrue() {
         Test.startTest();
-        Boolean result = OrgShape.isPlatformCacheEnabled();
+        Boolean result = orgShape.isPlatformCacheEnabled();
         Test.stopTest();
         System.assertEquals(
             false,
@@ -44,7 +91,7 @@ class OrgShape_Tests {
     @SuppressWarnings('PMD.ApexUnitTestShouldNotUseSeeAllDataTrue')
     static void testSeeAllDataPostiveWhenEnabled() {
         System.assert(
-            OrgShape.isSeeAllDataTrue(),
+            orgShape.isSeeAllDataTrue(),
             'Expected see all data to be true in a test method annotated with seeAllData=true'
         );
     }
@@ -52,7 +99,7 @@ class OrgShape_Tests {
     @isTest
     static void testSeeAllDataFalseWhenDisabled() {
         System.assert(
-            !OrgShape.isSeeAllDataTrue(),
+            !orgShape.isSeeAllDataTrue(),
             'Expected see all data to be true in a test method annotated with seeAllData=true'
         );
     }

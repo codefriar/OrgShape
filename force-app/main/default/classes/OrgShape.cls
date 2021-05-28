@@ -10,74 +10,136 @@ public with sharing class OrgShape {
     private String safeDefaultCachePartition;
     
     @TestVisible
-    private Organization orgShape;
+    private Organization orgShape = getOrgShape();
 
+    /**
+     * @description property reports whether this transaction took place
+     * in a sandbox.
+     */
     public Boolean isSandbox {
         get {
             return getOrgShape().isSandbox;
         }
     }
 
+    /**
+     * @description reports whether or not this transaction took place in an 
+     * org with multiCurrency enabled.
+     * Note: I have no idea why the underlying method is on UserInfo.
+     */
     public Boolean multiCurrencyEnabled {
         get{
             return UserInfo.isMultiCurrencyOrganization();
         }
+        private set {}
     }
 
+    /**
+     * @description reports whether this transaction took place in an org with 
+     * a namespace prefix
+     */
+    public Boolean hasNamespacePrefix {
+        get {
+            return String.isNotBlank(getOrgShape().NamespacePrefix);
+        }
+    }
+
+    /**
+     * @description reports the namespace prefix of this org. May return null;
+     */
+    public String namespacePrefix {
+        get {
+            return getOrgShape().NamespacePrefix;
+        }
+    }
+
+    /**
+     * @description reports this org's type. ie: 'Developer Edition'
+     */
     public String orgType { 
         get {
             return getOrgShape().OrganizationType;
         }
     }
 
+    /**
+     * @description reports the read-only status.
+     * this is a proxy for 'is this org active'
+     */
     public Boolean isReadOnly {
         get {
             return getOrgShape().isReadOnly;
         }
     }
 
+    /**
+     * @description returns the instance name.
+     * In practice not null.
+     */
     public String instanceName {
         get {
             return getOrgShape().instanceName;
         }
     }
 
+    /**
+     * @description convenience method. Alias for instanceName
+     */
     public String podName {
         get {
             return instanceName;
         }
     }
 
+    /**
+     * @description returns this org's fiscal year starting month
+     */
     public Integer getFiscalYearStartMonth {
         get {
             return getOrgShape().fiscalYearStartMonth;
         }
     }
 
+    /**
+     * @description reports the users' displayed theme.
+     */
     public Boolean lightningEnabled {
         get{
             return UserInfo.getUiThemeDisplayed().containsIgnoreCase('theme4');
         }
     }
 
+    /**
+     * @description reports the org's ID.
+     * in practice, this is a constant
+     */
     public Id id {
         get {
             return getOrgShape().id;
         }
     }
 
+    /**
+     * @description reports the org's locale
+     */
     public String locale{
         get {
             return getOrgShape().languageLocaleKey;
         }
     }
 
+    /**
+     * @description reports the org's name
+     */
     public String name {
         get {
             return getOrgShape().name;
         }
     }
 
+    /**
+     * @description reports the timeZoneSidKey
+     */
     public String timeZoneKey{
         get{
             return getOrgShape().timeZoneSidKey;
@@ -210,6 +272,10 @@ public with sharing class OrgShape {
 
     /// HELPER METHODS
 
+    /**
+     * @description Private method that memoizes the query result
+     * @return      `Organization`
+     */
     private Organization getOrgShape(){
         if(this.OrgShape != null){
             return this.orgShape;
