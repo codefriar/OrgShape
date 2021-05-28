@@ -26,11 +26,10 @@ Please adhere to this project's [`code of conduct`](https://github.com/codefriar
 To install or deploy OrgShape you have three options:
 
 1. SPM Install: This is the preferred method, [but it requires SPM. Find out more here.](https://spm-registry.herokuapp.com/) 
-``` sfdx spm:install -n 'org-shape' ```
+``` sfdx spm:install -n 'OrgShape' ```
 1. Package Link: Click [this link](https://login.salesforce.com/packaging/installPackage.apexp?p0=04t5e000000tprvAAA) to install the OrgShape unlocked package in your org.
-1. Git Clone: This is an exercise left to the reader.
+2. Git Clone: This is an exercise left to the reader.
 
-  
 ## Usage/Examples
 
 ### Determine your org's ID
