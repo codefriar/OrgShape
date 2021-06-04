@@ -118,7 +118,7 @@ class OrgShape_Tests {
         Test.stopTest();
         System.assert(
             result,
-            'We expect this to be true. But it it might fail, if you\'ve not set a default cache partition'
+            'We expect this to be true. But it it might fail if you\'ve not set a default cache partition'
         );
     }
 
@@ -130,7 +130,7 @@ class OrgShape_Tests {
         Test.stopTest();
         System.assert(
             result,
-            'We expect this to be true. But it it might fail, if you\'ve not set a default cache partition'
+            'We expect this to be true. But it it might fail if you\'ve not set a default cache partition'
         );
     }
 
