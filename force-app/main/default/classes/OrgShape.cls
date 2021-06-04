@@ -28,10 +28,11 @@ public with sharing class OrgShape {
      * Note: I have no idea why the underlying method is on UserInfo.
      */
     public Boolean multiCurrencyEnabled {
-        get{
+        get {
             return UserInfo.isMultiCurrencyOrganization();
         }
-        private set {}
+        private set {
+        }
     }
 
     /**
@@ -104,7 +105,7 @@ public with sharing class OrgShape {
      * @description reports the users' displayed theme.
      */
     public Boolean lightningEnabled {
-        get{
+        get {
             return UserInfo.getUiThemeDisplayed().containsIgnoreCase('theme4');
         }
     }
@@ -122,7 +123,7 @@ public with sharing class OrgShape {
     /**
      * @description reports the org's locale
      */
-    public String locale{
+    public String locale {
         get {
             return getOrgShape().languageLocaleKey;
         }
@@ -140,8 +141,8 @@ public with sharing class OrgShape {
     /**
      * @description reports the timeZoneSidKey
      */
-    public String timeZoneKey{
-        get{
+    public String timeZoneKey {
+        get {
             return getOrgShape().timeZoneSidKey;
         }
     }
@@ -233,8 +234,7 @@ public with sharing class OrgShape {
                 WHERE NamespacePrefix = ''
                 LIMIT 1
             ];
-            this.safeDefaultCachePartition =
-                'local.' + partition.DeveloperName;
+            this.safeDefaultCachePartition = 'local.' + partition.DeveloperName;
         } catch (System.QueryException qe) {
             System.debug(
                 LoggingLevel.WARN,
@@ -257,11 +257,14 @@ public with sharing class OrgShape {
      * https://github.com/SalesforceFoundation/NPSP/blob/aad20ffb747ecda9a037c4bce9cd19617b6a727b/src/classes/UTIL_Currency.cls#L79
      * @return      `Boolean`
      */
-    public Boolean isAdvancedMultiCurrencyManagementEnabled(){
+    public Boolean isAdvancedMultiCurrencyManagementEnabled() {
         Boolean isACMEnabled = false;
         if (this.multiCurrencyEnabled) {
             try {
-                Integer datedConversionRateCount = Database.query('SELECT Id FROM DatedConversionRate LIMIT 1').size();
+                Integer datedConversionRateCount = Database.query(
+                        'SELECT Id FROM DatedConversionRate LIMIT 1'
+                    )
+                    .size();
                 if (datedConversionRateCount == 1) {
                     isACMEnabled = true;
                 }
@@ -282,17 +285,12 @@ public with sharing class OrgShape {
      * @return      `Organization`
      */
     @SuppressWarnings('PMD.ApexCRUDViolation')
-    private Organization getOrgShape(){
-        if(this.OrgShape != null){
+    private Organization getOrgShape() {
+        if (this.OrgShape != null) {
             return this.orgShape;
         } else {
-            this.orgShape = [
-                SELECT FIELDS(STANDARD)
-                FROM Organization
-                LIMIT 1
-            ];
+            this.orgShape = [SELECT FIELDS(STANDARD) FROM Organization LIMIT 1];
         }
         return this.orgShape;
-
     }
 }
