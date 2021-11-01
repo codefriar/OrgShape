@@ -4,8 +4,8 @@
             "path": "force-app",
             "default": true,
             "package": "OrgShape",
-            "versionName": "ver 0.1",
-            "versionNumber": "0.1.0.NEXT"
+            "versionName": "ver 0.1.1",
+            "versionNumber": "0.1.1.NEXT"
         }
     ],
     "name": "OrgShape",
@@ -13,6 +13,8 @@
     "sfdcLoginUrl": "https://login.salesforce.com",
     "sourceApiVersion": "51.0",
     "packageAliases": {
-        "OrgShape": "0Ho5e0000004COGCA2"
+        "OrgShape": "0Ho5e0000004COGCA2",
+        "OrgShape@0.1.0-1": "04t5e000000u199AAA",
+        "OrgShape@0.1.1-1": "04t5e000000u991AAA"
     }
 }
