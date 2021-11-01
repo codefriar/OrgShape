@@ -16,7 +16,15 @@ public with sharing class OrgShape {
      * @description This property is a method call, not a query, so it's not memoized.
      */
     @TestVisible
-    private ConnectApi.OrganizationSettings connectOrganizationSettings = ConnectApi.Organization.getSettings();
+    private ConnectApi.OrganizationSettings connectOrganizationSettings {
+        get {
+            try {
+                return ConnectApi.Organization.getSettings();
+            } catch (System.UnsupportedOperationException unsupported) {
+                return new ConnectApi.OrganizationSettings();
+            }
+        }
+    }
 
     /**
      * @description property reports whether this transaction took place
@@ -60,7 +68,7 @@ public with sharing class OrgShape {
      */
     public String name {
         get {
-            return connectOrganizationSettings.name;
+            return getOrgShape().name;
         }
     }
 
