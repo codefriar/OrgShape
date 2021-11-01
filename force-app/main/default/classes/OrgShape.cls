@@ -13,12 +13,63 @@ public with sharing class OrgShape {
     private Organization orgShape = getOrgShape();
 
     /**
+     * @description This property is a method call, not a query, so it's not memoized.
+     */
+    @TestVisible
+    private ConnectApi.OrganizationSettings connectOrganizationSettings = ConnectApi.Organization.getSettings();
+
+    /**
      * @description property reports whether this transaction took place
      * in a sandbox.
      */
     public Boolean isSandbox {
         get {
             return getOrgShape().isSandbox;
+        }
+    }
+
+    /**
+     * @description property reports what the accessTimeout of this org is.
+     */
+    public Integer accessTimeout {
+        get {
+            return connectOrganizationSettings.accessTimeout;
+        }
+    }
+
+    /**
+     * @description property reports the chatter features enabled in the org.
+     */
+    public ConnectApi.Features features {
+        get {
+            return connectOrganizationSettings.features;
+        }
+    }
+
+    /**
+     * @description property reports the maintenanceInfo of this org.
+     */
+    public List<ConnectApi.MaintenanceInfo> maintenanceInfo {
+        get {
+            return connectOrganizationSettings.maintenanceInfo;
+        }
+    }
+
+    /**
+     * @description property reports the name of this org.
+     */
+    public String name {
+        get {
+            return connectOrganizationSettings.name;
+        }
+    }
+
+    /**
+     * @description property reports the userSettings for the calling user.
+     */
+    public ConnectApi.UserSettings userSettings {
+        get {
+            return connectOrganizationSettings.userSettings;
         }
     }
 
@@ -126,15 +177,6 @@ public with sharing class OrgShape {
     public String locale {
         get {
             return getOrgShape().languageLocaleKey;
-        }
-    }
-
-    /**
-     * @description reports the org's name
-     */
-    public String name {
-        get {
-            return getOrgShape().name;
         }
     }
 
@@ -277,7 +319,7 @@ public with sharing class OrgShape {
      * This is an easier to remember, convenient wrapper for the long form below
      */
     public Boolean isChatterEnabled() {
-        return ConnectApi.Organization.getSettings().features.chatter;
+        return features.chatter;
     }
 
     /// HELPER METHODS
